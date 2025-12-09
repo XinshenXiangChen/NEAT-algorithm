@@ -1,10 +1,14 @@
+from config import config
+
+
 class NEAT:
-    def __init__(self, num_input, num_output):
-        self.num_input = num_input
-        self.num_output = num_output
+    def __init__(self, fn_fitness):
+        self.num_input = config.get("input_nodes")
+        self.num_output = config.get("output_nodes")
         self.generation = 0
+        self.population_size = config.get("population_size")
 
-
+        self.fn_fitness = fn_fitness
         """
         The list of genotypes
         """
@@ -15,3 +19,7 @@ class NEAT:
     """
     def run(self, fn_step):
         input_values = fn_step()
+
+    def evaluate(self, fn_eval):
+        for g in self.population:
+            g.fitness_score = fn_eval(g)

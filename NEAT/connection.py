@@ -14,12 +14,14 @@ class Connection:
         self.weight = random.uniform(-1, 1)
 
         self.innov_num = None
+
+
         if innov_num == None:
             self.innov_num = Connection._innov_num_counter
             Connection._innov_num_counter += 1
+            Connection.connection_list.append(self)
         else:
             self.innov_num = innov_num
-        Connection.connection_list.append(self)
 
     def forward(self, value):
         return value*self.weight

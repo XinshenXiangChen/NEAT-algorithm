@@ -7,11 +7,13 @@ from config import config
 
 
 class Genotype:
-    def __init__(self, input_nodes, output_nodes, chance_mutate_weight=0.):
+    def __init__(self, input_nodes, output_nodes):
         self.node_counter = 0
         self.input_nodes = input_nodes[:] # layer -1
         self.hidden_layers = []
         self.output_nodes = output_nodes[:] # layer len(hidden_layers)
+
+        self.fn_fitness = None # set after evaluate
 
         self.connections = []
 
@@ -56,6 +58,7 @@ class Genotype:
                         break
                 new_connection = Connection(from_node, to_node, innov_num)
                 self.connections.append(new_connection)
+
 
 
 
