@@ -1,9 +1,0 @@
-input_nodes = 5
-output_nodes = 5
-population_size = 100
-perturbation_step = 0.2
-weight_perturbation_rate = 0.8
-weight_replace_rate = 0.2
-new_connection_rate = 0.05
-new_node_rate = 0.03
-new_node_layer_rate = 0.2
