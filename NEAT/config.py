@@ -13,7 +13,8 @@ config = {
     "num_generations": 100,
     "compatibility_threshold": 3.0,
     "compatibility_disjoint_coefficient": 1,
-    "compatibility_weight_coefficient": 0.4
+    "compatibility_weight_coefficient": 0.4,
+    "population_cut": 0.8
 }
 
 

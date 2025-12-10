@@ -21,20 +21,13 @@ class NEAT:
 
         self.num_generations = config.get("num_generations")
 
+        self.input_nodes = config.get("input_nodes")
+        self.output_nodes = config.get("output_nodes")
+
     def init_population(self):
         self.population = []
         for _ in range(self.population_size):
-            # Create minimal network: only input and output nodes, fully connected
-            input_nodes = [InputNode() for i in range(self.num_input)]
-            output_nodes = [OutputNode() for i in range(self.num_output)]
-            genotype = Genotype(input_nodes, output_nodes)
-
-            #  fully conected
-            for input_node in input_nodes:
-                for output_node in output_nodes:
-                    conn = Connection(input_node, output_node, None)
-                    genotype.connections.append(conn)
-
+            genotype = Genotype(self.input_nodes, self.output_nodes)
             self.population.append(genotype)
 
     """
@@ -89,7 +82,32 @@ class NEAT:
                 genotype.adjusted_fitness = genotype.fitness_score / species_size
 
     def create_population(self):
-        pass
+        # Initialize if empty
+        if not self.population:
+            self.init_population()
+            return
+
+        # Sort by fitness descending and keep top 20% as breeders
+        sorted_pop = sorted(self.population, key=lambda g: g.fitness_score, reverse=True)
+        survivors_count = max(1, int(self.population_size * config.get("population_cut")))
+        breeders = sorted_pop[:survivors_count]
+
+        new_population = []
+
+        # Elitism: clone the best
+        elite = crossover(breeders[0], breeders[0])
+        new_population.append(elite)
+
+        # Fill the rest via crossover/mutation from survivors
+        while len(new_population) < self.population_size:
+            strong = random.choice(breeders)
+            weak = random.choice(breeders)
+            child = crossover(strong, weak)
+            child.mutate()
+            new_population.append(child)
+
+        self.population = new_population
+        self.generation += 1
 
     def select_parents(self):
 
@@ -133,10 +151,17 @@ class NEAT:
             ii. Mutation
         """
 
-        for gen in range(self.num_generations):
-
-            # evaluation
+        best_seen = None
+        gen_best_list = []
+        for _ in range(self.num_generations):
+            # 1. Evaluate
             self.evaluate(fn_evaluate)
+
+            # Track best of this evaluated population
+            gen_best = max(self.population, key=lambda g: g.fitness_score)
+            if best_seen is None or gen_best.fitness_score > best_seen.fitness_score:
+                best_seen = gen_best
+            gen_best_list.append(gen_best)
 
             # 2. Speciation
             self.speciate()
@@ -145,4 +170,12 @@ class NEAT:
             self.calculate_adjusted_fitness()
 
             # 4. Selection & Reproduction
-            # (This would go here - create new population through crossover/mutation)
+            self.create_population()
+
+        # Final evaluation of the last generated population
+        self.evaluate(fn_evaluate)
+        gen_best = max(self.population, key=lambda g: g.fitness_score)
+        if best_seen is None or gen_best.fitness_score > best_seen.fitness_score:
+            best_seen = gen_best
+
+        return best_seen, gen_best_list
