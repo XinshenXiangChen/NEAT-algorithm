@@ -172,7 +172,6 @@ class NEAT:
             # 4. Selection & Reproduction
             self.create_population()
 
-        # Final evaluation of the last generated population
         self.evaluate(fn_evaluate)
         gen_best = max(self.population, key=lambda g: g.fitness_score)
         if best_seen is None or gen_best.fitness_score > best_seen.fitness_score:
