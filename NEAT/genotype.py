@@ -1,9 +1,9 @@
 import random
-from node import HiddenNode, Node, InputNode, OutputNode
-from connection import same_connection
-from connection import Connection
+from .node import HiddenNode, InputNode, OutputNode
+from .connection import same_connection
+from .connection import Connection
 
-from config import config
+from .config import config
 
 
 class Genotype:

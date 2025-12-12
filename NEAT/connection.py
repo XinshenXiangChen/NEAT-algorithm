@@ -1,6 +1,6 @@
 import random
 
-from config import config
+from .config import config
 
 
 class Connection:

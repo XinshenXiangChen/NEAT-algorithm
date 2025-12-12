@@ -198,7 +198,7 @@ class SnakeGame:
 
 
 if __name__ == "__main__":
-    from NEAT import NEAT
+    from NEAT.NEAT import NEAT
     
 
     game = SnakeGame()

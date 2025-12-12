@@ -1,8 +1,7 @@
 import random
-from config import config
-from node import *
-from genotype import Genotype, crossover
-from connection import Connection
+from .config import config
+
+from .genotype import Genotype, crossover
 
 class NEAT:
     def __init__(self, fn_fitness):

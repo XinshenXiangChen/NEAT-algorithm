@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from utils import sigmoid
+from .utils import sigmoid
 
 
 class Node:
