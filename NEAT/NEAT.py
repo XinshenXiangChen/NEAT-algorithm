@@ -16,12 +16,23 @@ class NEAT:
         """
         self.population = []
         self.species = []  # List of species, each is a list of genotypes
-        self.species_representatives = []  # Representative genotype for each species
+        self.species_representatives = [Genotype]  # Representative genotype for each species
 
         self.num_generations = config.get("num_generations")
 
         self.input_nodes = config.get("input_nodes")
         self.output_nodes = config.get("output_nodes")
+
+    def print_params(self):
+        print(f"Number of species: {len(self.species)}")
+
+        for species in self.species_representatives:
+            print("Species representatives:")
+            print(f"Number of hidden layers {len(species.hidden_layers)}")
+            for hidden_layer in species.hidden_layers:
+                print(f"Hidden layer nodes: {len(hidden_layer)}")
+
+            print("---" * 10)
 
     def init_population(self):
         self.population = []

@@ -129,11 +129,14 @@ class SnakeGame:
 
     def get_fitness(self):
         """Calculate fitness score based on score and steps."""
-        fitness = self.score * 2000 + self.steps
-        
+
+        fitness = self.score * 500 + self.steps
+        if self.steps > 250:
+            fitness -= (self.steps - 100) * 2
+
         # Penalty for dying by collision
         if self.died_by_collision:
-            fitness -= self.score * 100
+            fitness -= 2000
         
         return fitness
 
@@ -175,7 +178,7 @@ class SnakeGame:
             print()
         print("===" * 3)
 
-    def replay(self, genotype, max_steps=10000):
+    def replay(self, genotype, max_steps=2048):
 
         self.reset()
         self.max_steps = max_steps
@@ -204,7 +207,7 @@ if __name__ == "__main__":
     game = SnakeGame()
     
     def evaluate_genotype(genotype):
-        fitness = game.play_with_network(genotype, max_steps=256)
+        fitness = game.play_with_network(genotype, max_steps=500)
         return fitness
     
     # Initialize NEAT
@@ -213,11 +216,14 @@ if __name__ == "__main__":
     print("Starting NEAT training for Snake Game...")
     print("=" * 60)
     best_genotype, generation_best_list = neat.evolve(evaluate_genotype)
-    
-    game.reset()
+
+
     game.replay(best_genotype)
     print("=" * 60)
     print("Training completed!")
     print(f"Best overall fitness: {best_genotype.fitness_score:.2f}")
     print(f"Best genotype connections: {len(best_genotype.connections)}")
     print(f"Best genotype hidden layers: {len(best_genotype.hidden_layers)}")
+
+
+    neat.print_params()
