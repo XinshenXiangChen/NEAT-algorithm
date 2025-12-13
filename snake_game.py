@@ -132,7 +132,7 @@ class SnakeGame:
 
         fitness = self.score * 500 + self.steps
         if self.steps > 250:
-            fitness -= (self.steps - 100) * 2
+            fitness -= (self.steps - 100) * 4
 
         # Penalty for dying by collision
         if self.died_by_collision:
